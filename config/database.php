@@ -1,11 +1,29 @@
 <?php
+use Dotenv\Dotenv;
+require __DIR__.'/../vendor/autoload.php'; // Composer autoloader
+
+
+
+// Load .env file from the root of your project
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
 
 class Database {
-    private static $host = "localhost";
-    private static $db_name = "dev_to_platform";
-    private static $username = "root";
-    private static $password = "";
+    private static $host ;
+    private static $db_name ;
+    private static $username ;
+    private static $password ;
     public static $conn;
+
+    public  function __construct() {
+        // Retrieve values from the loaded environment variables
+        self::$host = $_ENV['host'];
+        self::$db_name = $_ENV['db_name'];
+        self::$username = $_ENV['username'];
+        self::$password = $_ENV['password'];
+        self::$conn = null;
+    }
 
     public static function getConnection() {
         
