@@ -1,7 +1,20 @@
 <?php
+require_once '../app/core/Router.php';
+require_once '../app/controllers/AuthController.php';
+require_once '../app/controllers/AdminController.php';
+require_once '../app/controllers/ArticleController.php';
+require_once '../app/controllers/CategoryController.php';
+require_once '../app/controllers/TagController.php';
 
-require_once '../config/database.php';
-require_once '../routes/web.php';
+// Créer une instance du Router
+$router = new App\Core\Router();
 
-// $path = $_GET['path'] ?? 'home'; 
-// route($path);
+// Ajouter des routes
+$router->add('', 'AuthController');
+$router->add('admin', 'AdminController');
+$router->add('articles', 'ArticleController');
+$router->add('categories', 'CategoryController');
+$router->add('tags', 'TagController');
+
+// Démarrer le routage
+$router->dispatch();

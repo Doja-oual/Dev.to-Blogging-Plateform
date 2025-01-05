@@ -1,14 +1,38 @@
 <?php
 
+namespace App\Controllers;
+
+require_once '../app/models/Model.php';
 
 
 
-class CategorieControll{
+class CategorieController{
 
+    public function get($id=null){
+        if($id){
+            $category=Model::show('categories WHERE id = ' .$id);
+            include '..app/view/admin/category.php';
+        }else{
+            $categories=Model::show('categories');
+            include '..app/view/admin/category.php';
 
+        }
+    }
 
-
+    public function addCtegory(){
+        if(isset($_POST['name'])){
+            $data=[
+                'name'=>$_POST['name']
+            ];
+            Model:add('categories',$data);
+            header('location :/category');
+        }
+    }
     
 }
+
+
+
+
 
 ?>
