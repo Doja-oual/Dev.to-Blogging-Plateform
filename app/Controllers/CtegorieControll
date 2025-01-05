@@ -25,10 +25,26 @@ class CategorieController{
                 'name'=>$_POST['name']
             ];
             Model:add('categories',$data);
-            header('location :/category');
+            header('Location :/category');
         }
     }
-    
+    // modifie categorie
+    public function modifie($id){
+        if(isset($_POST['name'])){
+            $data=[
+                'name'=>$_POST['name']
+            ];
+            Model::update('categories',$id,$data);
+            header('Location:/category');
+        }
+        
+    }
+    //supprime categorires
+    public function supprime(){
+        
+            Model::delete('categories',$id);
+            header('Location:/category');
+    }
 }
 
 
