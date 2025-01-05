@@ -1,4 +1,5 @@
 <?php
+namespace App\config;
 use Dotenv\Dotenv;
 require __DIR__.'/../vendor/autoload.php'; // Composer autoloader
 
