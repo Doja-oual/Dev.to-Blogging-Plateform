@@ -1,12 +1,5 @@
 <?php
-// require_once dirname(__DIR__) . '/config/functions.php';
-// require_once dirname(__DIR__) . '/includes/crud_functions.php';
 
-// $mysqli = connect_db();
-// $articles = get_all_articles($mysqli);
-// $category_stats = get_category_stats($mysqli);
-// $top_users = get_top_users($mysqli);
-// $top_articles = get_top_articles($mysqli);
 
 // Prepare data for the chart
 $categories = [];
@@ -63,9 +56,8 @@ $colors = [
             <!-- Main Content -->
             <div id="content">
 
-                <?php include 'components/topbar.php'; ?>
+<!--categorie -->
 
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
