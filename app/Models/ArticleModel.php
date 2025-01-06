@@ -1,5 +1,5 @@
 <?php
-namespace App\Models;
+namespace App\ModelArticle;
 use  App\config\Database;
 
 class ArticleModel{

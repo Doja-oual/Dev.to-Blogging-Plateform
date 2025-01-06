@@ -1,8 +1,10 @@
 <?php
-namespace App\config;
-use Dotenv\Dotenv;
-require __DIR__.'/../vendor/autoload.php'; // Composer autoloader
+namespace Config;
 
+require __DIR__. '/../vendor/autoload.php'; // Composer autoloader
+use Dotenv\Dotenv;
+use PDO;
+USE PDOException;
 
 
 // Load .env file from the root of your project
@@ -31,7 +33,7 @@ class Database {
         try {
             self::$conn = new PDO("mysql:host=" . self::$host . ";dbname=" . self::$db_name, self::$username, self::$password);
             self::$conn->exec("set names utf8");
-            echo "works";
+            // echo "works";
         } catch(PDOException $exception) {
             echo "Erreur de connexion: " . $exception->getMessage();
         }

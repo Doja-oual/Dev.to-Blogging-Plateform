@@ -1,9 +1,8 @@
 <?php
 
 
-// Prepare data for the chart
-$categories = [];
-$counts = [];
+
+
 // Define colors for the chart
 $colors = [
     'rgb(78, 115, 223)',    // primary

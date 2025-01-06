@@ -1,7 +1,8 @@
 <?php
-namespace App\Controllers;
+namespace App\ArticleControllers;
 
-require_once'../app/models/ArticleModel.php';
+require_once '../../vendor/autoload.php';
+use App\ModelArticle\ArticleModel;
 
 class ArticleController{
     // Afivhie tous les articles

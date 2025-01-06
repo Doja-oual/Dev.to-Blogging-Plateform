@@ -1,17 +1,30 @@
 <?php
-      
-require_once __DIR__. '../config/database.php';
+    namespace App\Models;
+    require_once '../../vendor/autoload.php';
+    use  Config\Database;
+    
+    
+  
 
 class Model{
     private $conn;
     private $table;
-
     public static function show($table) {
-        $con=Database::getConnection(); 
+        $conn=Database::getConnection(); 
         $sql = "SELECT * FROM $table ";
-        $query = $con->prepare($sql);
+        $query = $conn->prepare($sql);
         $query->execute();    
-        return $query->fetchAll(PDO::FETCH_ASSOC);
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public static function countItems($table){
+
+        $conn = Database::getInstanse()->getConnection();
+
+        $query = "SELECT COUNT(*) FROM $table";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $users = $stmt->fetch();
+        return $users[0];
     }
 
 

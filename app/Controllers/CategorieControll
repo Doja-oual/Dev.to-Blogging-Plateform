@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Controllers;
+namespace App\CategoryControllers;
 
-require_once '../app/models/Model.php';
+require_once '../../vendor/autoload.php';
+use App\Modele\Model;
 
 
 
 class CategorieController{
 
-    public function get($id=null){
+    public function getCtegory($id=null){
         if($id){
             $category=Model::show('categories WHERE id = ' .$id);
             include '..app/view/admin/category.php';

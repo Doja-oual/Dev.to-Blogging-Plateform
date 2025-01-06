@@ -1,25 +1,30 @@
 <?php
-
 namespace App\Controllers;
 
-require_once '../app/models/Model.php';
+require_once '../../vendor/autoload.php';
+use Config\Database;
+use App\Models\Model;
+// namespace app\TagControllers;
 
 
+// require_once '../models/Model.php';
 
 class TagController{
 
-    public function get($id=null){
+    public  function getTag($id=null){
         if($id){
             $tag=Model::show('tags WHERE id = ' .$id);
-            include '..app/view/admin/tag.php';
+
+            include '..app/view/tag.php';
         }else{
-            $tage=Model::show('tags');
-            include '..app/view/admin/tag.php';
+            $tag=Model::show('tags');
+            // include '..app/view/tag.php';
+            return $tag;
 
         }
     }
 
-    public function addCtegory(){
+    public  function addTag(){
         if(isset($_POST['name'])){
             $data=[
                 'name'=>$_POST['name']
@@ -29,7 +34,7 @@ class TagController{
         }
     }
     // modifie categorie
-    public function modifie($id){
+    public  function modifieTag($id){
         if(isset($_POST['name'])){
             $data=[
                 'name'=>$_POST['name']
@@ -40,7 +45,7 @@ class TagController{
         
     }
     //supprime categorires
-    public function supprime(){
+    public  function supprimeTag(){
         
             Model::delete('tags',$id);
             header('Location:/tag');
