@@ -1,55 +1,45 @@
 <?php
-
-namespace App\CategoryControllers;
+namespace App\Controllers;
 
 require_once '../../vendor/autoload.php';
-use App\Modele\Model;
+use Config\Database;
+use App\Models\Model;
 
+class CategoryController {
 
-
-class CategorieController{
-
-    public function getCtegory($id=null){
-        if($id){
-            $category=Model::show('categories WHERE id = ' .$id);
-            include '..app/view/admin/category.php';
-        }else{
-            $categories=Model::show('categories');
-            include '..app/view/admin/category.php';
-
+    public function getCategory($id = null) {
+        if ($id) {
+            $category = Model::show('categories WHERE id = ' . $id);
+            include '../app/view/category.php';
+        } else {
+            $categories = Model::show('categories');
+            return $categories;
         }
     }
 
-    public function addCtegory(){
-        if(isset($_POST['name'])){
-            $data=[
-                'name'=>$_POST['name']
+    public function addCategory() {
+        if (isset($_POST['name'])) {
+            $data = [
+                'name' => $_POST['name']
             ];
-            Model:add('categories',$data);
-            header('Location :/category');
+            Model::add('categories', $data);
+            header('Location: /category');
         }
     }
-    // modifie categorie
-    public function modifie($id){
-        if(isset($_POST['name'])){
-            $data=[
-                'name'=>$_POST['name']
+
+    public function modifieCategory($id) {
+        if (isset($_POST['name'])) {
+            $data = [
+                'name' => $_POST['name']
             ];
-            Model::update('categories',$id,$data);
-            header('Location:/category');
+            Model::update('categories', $id, $data);
+            header('Location: /category');
         }
-        
     }
-    //supprime categorires
-    public function supprime(){
-        
-            Model::delete('categories',$id);
-            header('Location:/category');
+
+    public function supprimeCategory($id) {
+        Model::delete('categories', $id);
+        header('Location: /category');
     }
 }
-
-
-
-
-
 ?>

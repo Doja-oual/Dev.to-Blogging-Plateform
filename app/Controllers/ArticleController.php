@@ -1,36 +1,35 @@
 <?php
-namespace App\ArticleControllers;
+namespace App\Controllers;
 
 require_once '../../vendor/autoload.php';
+// require_once __DIR__ . '/../models/ArticleModel.php';
 use App\ModelArticle\ArticleModel;
 
-class ArticleController{
-    // Afivhie tous les articles
-
-    public function showAll(){
-        $articles=\App\Models\ArticleModel::getAllArticle();
-        include'../app/view/articleList.php';
-
+class ArticleController {
+    // Affiche tous les articles
+    public function showAll() {
+        $articles = ArticleModel::getAllArticle();
+        include '../app/view/articleList.php';
     }
-    //ajoute article
-    public function creatArticle(){
 
-        if($_SERVER['REQUEST_METHOD']=='POST'){
-            $data=[
+    // Ajoute un article
+    public function createArticle() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
                 'title' => $_POST['title'],
                 'slug' => $_POST['slug'],
                 'content' => $_POST['content'],
                 'category_id' => $_POST['category_id'],
                 'author_id' => $_POST['author_id']
             ];
-            \App\Models\ArticleModel::addArticle($data);
-            header('Location:/articles');
-        }else{
-            include'../app/views/articleForm.php';
+            ArticleModel::addArticle($data);
+            header('Location: /articles');
+        } else {
+            include '../app/views/articleForm.php';
         }
-
     }
-    // modifiee article 
+
+    // Modifie un article
     public function edit($id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
@@ -39,19 +38,18 @@ class ArticleController{
                 'content' => $_POST['content'],
                 'category_id' => $_POST['category_id']
             ];
-            \App\Models\ArticleModel::updateArticle($id, $data);
+            ArticleModel::updateArticle($id, $data);
             header('Location: /articles');
         } else {
-            $article = \App\Models\ArticleModel::getArticleById($id);
+            $article = ArticleModel::getArticleById($id);
             include '../app/views/articleForm.php';
         }
     }
 
-    //supprime
-    public function delete($id){
-        \App\Models\ArticleModel::deleteArticle($id);
+    // Supprime un article
+    public function delete($id) {
+        ArticleModel::deleteArticle($id);
         header('Location: /articles');
-
-
     }
 }
+?>

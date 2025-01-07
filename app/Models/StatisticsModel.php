@@ -6,7 +6,6 @@ use App\Config\Database;
 
 class StatisticsModel
 {
-    // Nombre total d'entités (utilisateurs, articles, catégories, tags)
     public static function getEntityCount($table)
     {
         $db = Database::getConnection();
@@ -15,7 +14,6 @@ class StatisticsModel
         return $stmt->fetch(PDO::FETCH_ASSOC)['count'];
     }
 
-    // Les 3 meilleurs auteurs (basés sur les articles publiés ou lus)
     public static function getTopAuthors()
     {
         $db = Database::getConnection();
@@ -31,7 +29,6 @@ class StatisticsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Nombre d'articles par catégorie
     public static function getArticlesByCategory()
     {
         $db = Database::getConnection();
@@ -45,7 +42,6 @@ class StatisticsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Articles les plus populaires
     public static function getPopularArticles($limit = 5)
     {
         $db = Database::getConnection();
