@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
-require_once '../../vendor/autoload.php';
+
+require_once '../../vendor/autoload.php'; // Ce code doit venir après la déclaration du namespace
+
 use App\Models\ArticleModel;
 
 class ArticleController {
@@ -19,6 +21,13 @@ class ArticleController {
             if (empty($data['title']) || empty($data['slug']) || empty($data['content'])) {
                 throw new \Exception("Tous les champs requis doivent être remplis");
             }
+            
+            // Verifier si le slug existe deja
+            if (ArticleModel::checkSlugExists($data['slug'])) {
+                throw new \Exception("Le slug est déjà utilisé. Veuillez en choisir un autre.");
+            }
+            
+            // Appeler le modele pour ajouter l'article
             return ArticleModel::addArticle($data);
         } catch (\Exception $e) {
             throw $e;
@@ -49,7 +58,7 @@ class ArticleController {
         }
     }
 
-    // Récupérer un article par ID
+    // show un article par ID
     public function getArticleById($id) {
         try {
             return ArticleModel::getArticleById($id);
@@ -59,7 +68,7 @@ class ArticleController {
     }
 }
 
-// Exemple d'utilisation
+// Exemple d'utilisation dans le contrôleur
 $articleController = new ArticleController();
 
 try {
@@ -73,6 +82,8 @@ try {
     
     if ($articleController->addArticle($data)) {
         echo "Article ajouté avec succès";
+        header('Location: /articles'); 
+        exit();
     }
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
