@@ -1,55 +1,79 @@
 <?php
 namespace App\Controllers;
-
 require_once '../../vendor/autoload.php';
-// require_once __DIR__ . '/../models/ArticleModel.php';
-use App\ModelArticle\ArticleModel;
+use App\Models\ArticleModel;
 
 class ArticleController {
-    // Affiche tous les articles
-    public function showAll() {
-        $articles = ArticleModel::getAllArticle();
-        include '../app/view/articleList.php';
-    }
-
-    // Ajoute un article
-    public function createArticle() {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'title' => $_POST['title'],
-                'slug' => $_POST['slug'],
-                'content' => $_POST['content'],
-                'category_id' => $_POST['category_id'],
-                'author_id' => $_POST['author_id']
-            ];
-            ArticleModel::addArticle($data);
-            header('Location: /articles');
-        } else {
-            include '../app/views/articleForm.php';
+    // Récupérer tous les articles
+    public function getAllArticles() {
+        try {
+            return ArticleModel::getAllArticles();
+        } catch (\PDOException $e) {
+            return false;
         }
     }
 
-    // Modifie un article
-    public function edit($id) {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'title' => $_POST['title'],
-                'slug' => $_POST['slug'],
-                'content' => $_POST['content'],
-                'category_id' => $_POST['category_id']
-            ];
-            ArticleModel::updateArticle($id, $data);
-            header('Location: /articles');
-        } else {
-            $article = ArticleModel::getArticleById($id);
-            include '../app/views/articleForm.php';
+    // Ajouter un nouvel article
+    public function addArticle($data) {
+        try {
+            if (empty($data['title']) || empty($data['slug']) || empty($data['content'])) {
+                throw new \Exception("Tous les champs requis doivent être remplis");
+            }
+            return ArticleModel::addArticle($data);
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 
-    // Supprime un article
-    public function delete($id) {
-        ArticleModel::deleteArticle($id);
-        header('Location: /articles');
+    // Mettre à jour un article
+    public function updateArticle($id, $data) {
+        try {
+            if (empty($id)) {
+                throw new \Exception("ID article requis");
+            }
+            return ArticleModel::updateArticle($id, $data);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    // Supprimer un article
+    public function deleteArticle($id) {
+        try {
+            if (empty($id)) {
+                throw new \Exception("ID article requis");
+            }
+            return ArticleModel::deleteArticle($id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    // Récupérer un article par ID
+    public function getArticleById($id) {
+        try {
+            return ArticleModel::getArticleById($id);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
-?>
+
+// Exemple d'utilisation
+$articleController = new ArticleController();
+
+try {
+    $data = [
+        'title' => 'Premier Article',
+        'slug' => 'premier-article',
+        'content' => 'Contenu de l\'article',
+        'category_id' => 1,
+        'author_id' => 1
+    ];
+    
+    if ($articleController->addArticle($data)) {
+        echo "Article ajouté avec succès";
+    }
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+}

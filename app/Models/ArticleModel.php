@@ -1,6 +1,6 @@
 <?php
-namespace App\ModelArticle;
-use  App\config\Database;
+namespace App\Models;
+use Config\Database;
 
 class ArticleModel{
 
