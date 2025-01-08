@@ -69,4 +69,46 @@ class UserModel {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+
+    //  enregistrer un nouvel utilisateur
+    public static function register($username, $email, $password) {
+        $conn = self::getConnection();
+        $sql = "INSERT INTO users (username, email, password_hash, role) 
+                VALUES (:username, :email, :password_hash, 'user')";
+        
+        $stmt = $conn->prepare($sql);
+        
+        return $stmt->execute([
+            'username' => $username,
+            'email' => $email,
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT)
+        ]);
+    }
+
+    //  pour verifie deja mmeme email
+    public static function emailExists($email) {
+        $conn = self::getConnection();
+        $sql = "SELECT id FROM users WHERE email = :email";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC) !== false;
+    }
+
+
+  
+
+    public static function login($email, $password) {
+        $conn = self::getConnection();
+        $sql = "SELECT id, username, email, password_hash, role FROM users WHERE email = :email";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password_hash'])) {
+            // Retourner les informations de l'utilisateur (sans le mot de passe)
+            unset($user['password_hash']);
+            return $user;
+        }
+        return false;
+    }
 }
