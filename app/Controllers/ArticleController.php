@@ -1,8 +1,6 @@
 <?php
 namespace App\Controllers;
-
-require_once '../../vendor/autoload.php'; // Ce code doit venir après la déclaration du namespace
-
+require_once __DIR__. '/../../vendor/autoload.php';
 use App\Models\ArticleModel;
 
 class ArticleController {
@@ -68,23 +66,3 @@ class ArticleController {
     }
 }
 
-// Exemple d'utilisation dans le contrôleur
-$articleController = new ArticleController();
-
-try {
-    $data = [
-        'title' => 'Premier Article',
-        'slug' => 'premier-article',
-        'content' => 'Contenu de l\'article',
-        'category_id' => 1,
-        'author_id' => 1
-    ];
-    
-    if ($articleController->addArticle($data)) {
-        echo "Article ajouté avec succès";
-        header('Location: /articles'); 
-        exit();
-    }
-} catch (Exception $e) {
-    echo "Erreur : " . $e->getMessage();
-}

@@ -6,7 +6,6 @@ CREATE TABLE categories (
     name TEXT NOT NULL
 );
 
--- Create table for users
 CREATE TABLE users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(20) NOT NULL UNIQUE,
@@ -17,7 +16,6 @@ CREATE TABLE users (
     profile_picture_url VARCHAR(255)
 );
 
--- Create table for articles
 
 CREATE TABLE articles (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,

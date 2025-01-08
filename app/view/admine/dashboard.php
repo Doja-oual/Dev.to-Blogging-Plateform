@@ -182,45 +182,7 @@ le code la <!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Articles Récents -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2 class="text-secondary mb-4">Articles Récents</h2>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Auteur</th>
-                                <th>Date de Publication</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Les meilleures pratiques en PHP 8</td>
-                                <td>Jean Dupont</td>
-                                <td>2023-10-01</td>
-                                <td><span class="badge bg-success">Publié</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-info btn-sm">Edit</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Introduction à Docker</td>
-                                <td>Marie Curie</td>
-                                <td>2023-09-28</td>
-                                <td><span class="badge bg-warning">En Attente</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-info btn-sm">Edit</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+           
         </div>
     </div>
 
