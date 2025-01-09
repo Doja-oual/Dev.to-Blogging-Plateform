@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
-require_once __DIR__. '/../../vendor/autoload.php';
+
+require_once __DIR__ . '/../../vendor/autoload.php';
 use App\Models\ArticleModel;
 
 class ArticleController {
@@ -12,6 +13,14 @@ class ArticleController {
             return false;
         }
     }
+    public function getTagsForArticle($articleId) {
+        try {
+            $articleModel = new ArticleModel();
+            return $articleModel->getTagsForArticle($articleId);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 
     // Ajouter un nouvel article
     public function addArticle($data) {
@@ -19,14 +28,21 @@ class ArticleController {
             if (empty($data['title']) || empty($data['slug']) || empty($data['content'])) {
                 throw new \Exception("Tous les champs requis doivent être remplis");
             }
-            
-            // Verifier si le slug existe deja
+
+            // Vérifier si le slug existe déjà
             if (ArticleModel::checkSlugExists($data['slug'])) {
                 throw new \Exception("Le slug est déjà utilisé. Veuillez en choisir un autre.");
             }
-            
-            // Appeler le modele pour ajouter l'article
-            return ArticleModel::addArticle($data);
+
+            // Ajouter l'article
+            $articleId = ArticleModel::addArticle($data);
+
+            // Ajouter les tags associés
+            if (!empty($data['tags'])) {
+                ArticleModel::addTagsToArticle($articleId, $data['tags']);
+            }
+
+            return true;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -38,7 +54,16 @@ class ArticleController {
             if (empty($id)) {
                 throw new \Exception("ID article requis");
             }
-            return ArticleModel::updateArticle($id, $data);
+
+            // Mettre à jour l'article
+            ArticleModel::updateArticle($id, $data);
+
+            // Mettre à jour les tags associés
+            if (!empty($data['tags'])) {
+                ArticleModel::addTagsToArticle($id, $data['tags']);
+            }
+
+            return true;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -56,7 +81,7 @@ class ArticleController {
         }
     }
 
-    // show un article par ID
+    // Récupérer un article par ID
     public function getArticleById($id) {
         try {
             return ArticleModel::getArticleById($id);
@@ -65,4 +90,3 @@ class ArticleController {
         }
     }
 }
-

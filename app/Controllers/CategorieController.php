@@ -9,7 +9,7 @@ class CategorieController {
     public function getCategory($id = null) {
         if ($id) {
             $category = Model::show('categories WHERE id = ' . $id);
-            include '../app/view/category.php';
+            return $category[0]; 
         } else {
             $categories = Model::show('categories');
             return $categories;

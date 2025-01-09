@@ -1,6 +1,14 @@
 <?php
 require_once '../../../vendor/autoload.php';
 use App\Controllers\ArticleController;
+use App\Controllers\CategorieController;
+use App\Controllers\TagController;
+
+$categoryController = new CategorieController();
+$categories = $categoryController->getCategory();
+
+$tagController = new TagController();
+$tags = $tagController->getTag();
 
 $articleController = new ArticleController();
 
@@ -12,25 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'slug' => $_POST['slug'],
                 'content' => $_POST['content'],
                 'category_id' => $_POST['category_id'],
-                'author_id' => $_POST['author_id']
+                'author_id' => $_POST['author_id'],
+                'tags' => $_POST['tags'] ?? [] 
             ];
             try {
                 $articleController->addArticle($data);
-                header('Location: /articles');
-                exit();
-            } catch (\Exception $e) {
-                echo "<div class='alert alert-danger'>Erreur : " . $e->getMessage() . "</div>";
-            }
-        } elseif ($_POST['action'] === 'edit') {
-            $data = [
-                'title' => $_POST['title'],
-                'slug' => $_POST['slug'],
-                'content' => $_POST['content'],
-                'category_id' => $_POST['category_id'],
-                'author_id' => $_POST['author_id']
-            ];
-            try {
-                $articleController->updateArticle($_POST['id'], $data);
                 header('Location: /articles');
                 exit();
             } catch (\Exception $e) {
@@ -63,13 +57,10 @@ $articles = $articleController->getAllArticles();
     <div class="container my-5">
         <h1 class="text-primary text-center mb-4">Gestion des Articles</h1>
 
-        <!-- Formulaire pour ajouter ou modifier un article -->
-        <h2 class="text-secondary mb-3">Ajouter / Modifier un Article</h2>
+        <!-- Formulaire pour ajouter un article -->
+        <h2 class="text-secondary mb-3">Ajouter un Article</h2>
         <form action="" method="POST" class="bg-white p-4 shadow-sm rounded">
-            <input type="hidden" name="action" value="<?= isset($_GET['edit']) ? 'edit' : 'add' ?>">
-            <?php if (isset($_GET['edit'])) : ?>
-                <input type="hidden" name="id" value="<?= $_GET['edit'] ?>">
-            <?php endif; ?>
+            <input type="hidden" name="action" value="add">
             <div class="mb-3">
                 <label for="title" class="form-label">Titre :</label>
                 <input type="text" name="title" id="title" class="form-control" required>
@@ -84,13 +75,25 @@ $articles = $articleController->getAllArticles();
             </div>
             <div class="mb-3">
                 <label for="category_id" class="form-label">Catégorie :</label>
-                <input type="number" name="category_id" id="category_id" class="form-control" required>
+                <select name="category_id" id="category_id" class="form-control" required>
+                    <?php foreach ($categories as $category) : ?>
+                        <option value="<?= htmlspecialchars($category['id']) ?>"><?= htmlspecialchars($category['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="tags" class="form-label">Tags :</label>
+                <select name="tags[]" id="tags" class="form-control" multiple required>
+                    <?php foreach ($tags as $tag) : ?>
+                        <option value="<?= htmlspecialchars($tag['id']) ?>"><?= htmlspecialchars($tag['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="author_id" class="form-label">Auteur :</label>
                 <input type="number" name="author_id" id="author_id" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary"><?= isset($_GET['edit']) ? 'Modifier' : 'Ajouter' ?></button>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
         </form>
 
         <!-- Liste des articles -->
@@ -103,6 +106,7 @@ $articles = $articleController->getAllArticles();
                     <th>Slug</th>
                     <th>Contenu</th>
                     <th>Catégorie</th>
+                    <th>Tags</th>
                     <th>Auteur</th>
                     <th>Actions</th>
                 </tr>
@@ -115,10 +119,11 @@ $articles = $articleController->getAllArticles();
                             <td><?= htmlspecialchars($article['title']) ?></td>
                             <td><?= htmlspecialchars($article['slug']) ?></td>
                             <td><?= htmlspecialchars($article['content']) ?></td>
-                            <td><?= htmlspecialchars($article['category_id']) ?></td>
+                            <td><?= htmlspecialchars($article['category_name']) ?></td>
+                            <td><?= htmlspecialchars($article['tags']) ?></td>
                             <td><?= htmlspecialchars($article['author_id']) ?></td>
                             <td>
-                                <a href="?edit=<?= $article['id'] ?>" class="btn btn-warning btn-sm">Modifier</a>
+                                <a href="edit.php?edit=<?= $article['id'] ?>" class="btn btn-warning btn-sm">Modifier</a>
                                 <form action="" method="POST" style="display:inline;">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= $article['id'] ?>">
@@ -129,7 +134,7 @@ $articles = $articleController->getAllArticles();
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="7" class="text-center">Aucun article trouvé.</td>
+                        <td colspan="8" class="text-center">Aucun article trouvé.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

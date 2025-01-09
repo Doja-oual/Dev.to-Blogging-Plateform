@@ -8,7 +8,7 @@ class ArticleModel {
         return Database::getConnection();
     }
 
-    // Verifie si un slug existe déjà
+    // Vérifie si un slug existe déjà
     public static function checkSlugExists($slug) {
         $conn = self::getConnection();
         $sql = "SELECT COUNT(*) FROM articles WHERE slug = :slug";
@@ -17,6 +17,7 @@ class ArticleModel {
         return $stmt->fetchColumn() > 0;
     }
 
+    
     // Ajouter un article
     public static function addArticle($data) {
         $conn = self::getConnection();
@@ -24,25 +25,41 @@ class ArticleModel {
                 VALUES (:title, :slug, :content, :category_id, :author_id)";
         
         $stmt = $conn->prepare($sql);
-        return $stmt->execute([
+        $stmt->execute([
             'title' => $data['title'],
             'slug' => $data['slug'],
             'content' => $data['content'],
             'category_id' => $data['category_id'],
             'author_id' => $data['author_id']
         ]);
+        return $conn->lastInsertId(); // Retourne l'ID de l'article ajouté
     }
 
-    // show tous les articles
+    // Récupérer tous les articles avec catégorie et tags
     public static function getAllArticles() {
         $conn = self::getConnection();
-        $sql = "SELECT * FROM articles";
+        $sql = "
+            SELECT 
+                articles.*, 
+                categories.name AS category_name,
+                GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags
+            FROM 
+                articles
+            LEFT JOIN 
+                categories ON articles.category_id = categories.id
+            LEFT JOIN 
+                article_tags ON articles.id = article_tags.article_id
+            LEFT JOIN 
+                tags ON article_tags.tag_id = tags.id
+            GROUP BY 
+                articles.id
+        ";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    // show un article par ID
+    // Récupérer un article par ID
     public static function getArticleById($id) {
         $conn = self::getConnection();
         $sql = "SELECT * FROM articles WHERE id = :id";
@@ -60,7 +77,6 @@ class ArticleModel {
                 content = :content, 
                 category_id = :category_id 
                 WHERE id = :id";
-        
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
             'title' => $data['title'],
@@ -77,5 +93,27 @@ class ArticleModel {
         $sql = "DELETE FROM articles WHERE id = :id";
         $stmt = $conn->prepare($sql);
         return $stmt->execute(['id' => $id]);
+    }
+
+    // Ajouter des tags à un article
+    public static function addTagsToArticle($articleId, $tagIds) {
+        $conn = self::getConnection();
+        $sql = "INSERT INTO article_tags (article_id, tag_id) VALUES (:article_id, :tag_id)";
+        $stmt = $conn->prepare($sql);
+        foreach ($tagIds as $tagId) {
+            $stmt->execute(['article_id' => $articleId, 'tag_id' => $tagId]);
+        }
+    }
+
+    // Récupérer les tags d'un article
+    public static function getTagsForArticle($articleId) {
+        $conn = self::getConnection();
+        $sql = "SELECT tags.id, tags.name 
+                FROM tags 
+                JOIN article_tags ON tags.id = article_tags.tag_id 
+                WHERE article_tags.article_id = :article_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['article_id' => $articleId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
