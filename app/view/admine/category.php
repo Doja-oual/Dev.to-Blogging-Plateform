@@ -14,9 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $categories = $categoryController->getCategory();
+
 $articleCountByCategory = $categoryController->getArticleCountByCategory();
+
 $mostPopularCategories = $categoryController->getMostPopularCategories();
+
 $categoryTrends = $categoryController->getCategoryTrends();
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -32,6 +36,67 @@ $categoryTrends = $categoryController->getCategoryTrends();
         .btn-warning { background-color: rgb(246, 194, 62); border-color: rgb(246, 194, 62); }
         .btn-danger { background-color: rgb(231, 74, 59); border-color: rgb(231, 74, 59); }
         .bg-light { background-color: rgb(244, 246, 249) !important; }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-radius: 15px 15px 0 0;
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-body ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .card-body ul li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-body ul li:last-child {
+            border-bottom: none;
+        }
+
+        .card-body ul li i {
+            margin-right: 10px;
+            color: #2575fc;
+        }
+
+        .row {
+            margin-top: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: #2575fc;
+            font-weight: bold;
+        }
+    
     </style>
 </head>
 <body class="bg-light">
@@ -47,7 +112,7 @@ $categoryTrends = $categoryController->getCategoryTrends();
                     <div class="card-body">
                         <ul>
                             <?php foreach ($articleCountByCategory as $category): ?>
-                                <li><?= htmlspecialchars($category['name']) ?>: <?= $category['article_count'] ?> articles</li>
+                                <li><?= htmlspecialchars($category['name']) ?>: <?= $category['item_count'] ?> articles</li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -59,7 +124,7 @@ $categoryTrends = $categoryController->getCategoryTrends();
                     <div class="card-body">
                         <ul>
                             <?php foreach ($mostPopularCategories as $category): ?>
-                                <li><?= htmlspecialchars($category['name']) ?>: <?= $category['total_views'] ?> vues</li>
+                                <li><?= htmlspecialchars($category['name']) ?>: <?= $category['total_count'] ?> vues</li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -71,7 +136,7 @@ $categoryTrends = $categoryController->getCategoryTrends();
                     <div class="card-body">
                         <ul>
                             <?php foreach ($categoryTrends as $trend): ?>
-                                <li><?= htmlspecialchars($trend['name']) ?>: <?= $trend['article_count'] ?> articles le <?= $trend['creation_date'] ?></li>
+                                <li><?= htmlspecialchars($trend['name']) ?>: <?= $trend['item_count'] ?> articles le <?= $trend['creation_date'] ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -129,6 +194,6 @@ $categoryTrends = $categoryController->getCategoryTrends();
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
 </body>
 </html>

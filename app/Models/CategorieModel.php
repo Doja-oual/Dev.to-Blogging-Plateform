@@ -7,19 +7,19 @@ use Config\Database;
 class CategorieModel extends Model {
 
     protected $table = 'categories';
-
+    public function fl(){echo 'ossama';}
     public function __construct() {
         $this->conn = Database::getConnection();
     }
-    // public function getArticleCountByCategory() {
-    //     return Model ::getCountByRelation('categories', 'articles', 'category_id');
-    // }
+    public function getArticleCountByCategory() {
+        return parent::getCountByRelation('categories', 'articles', 'category_id');
+    }
 
     public function getMostPopularCategories() {
-        return Model::getMostPopular('categories', 'articles', 'category_id', 'views');
+        return parent::getMostPopular('categories', 'articles', 'category_id', 'views');
     }
     public function getCategoryTrends() {
-        return Model::getTrends('categories', 'articles', 'category_id', 'created_at');
+        return parent::getTrends('categories', 'articles', 'category_id', 'created_at');
     }
 
     public function showCategory() {

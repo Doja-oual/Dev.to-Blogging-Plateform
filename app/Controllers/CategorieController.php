@@ -14,13 +14,13 @@ class CategorieController {
     public function __construct() {
         $this->categoryModel = new CategorieModel(); 
     }
-    public function getCategory($id = null) {
+    public function getCategory($id = null)  {
         if ($id) {
-            $category = Model::showCategory('categories WHERE id = ' . $id);
+            $category = $this->categoryModel->showCategory('categories WHERE id = ' . $id);
             return $category[0]; 
         } else {
-            // $categories = Model::showCategory('categories');
-            // return $categories;
+            $categories = $this->categoryModel->showCategory();
+            return $categories;
         }
     }
 
@@ -49,9 +49,9 @@ class CategorieController {
         header('Location: /category');
     }
 
-    // public function getArticleCountByCategory() {
-    //     return $this->categoryModel->getArticleCountByCategory();
-    // }
+    public function getArticleCountByCategory() {
+        return $this->categoryModel->getArticleCountByCategory();
+    }
 
     /**
      * Récupérer les catégories les plus populaires.
