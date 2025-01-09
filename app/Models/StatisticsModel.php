@@ -1,8 +1,8 @@
-
 <?php
-namespace App\ModelsStatistics;
+namespace App\Models;
 
-use App\Config\Database;
+use Config\Database;
+use PDO;
 
 class StatisticsModel
 {
@@ -55,4 +55,3 @@ class StatisticsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-?>

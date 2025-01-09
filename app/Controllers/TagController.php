@@ -3,10 +3,10 @@ namespace App\Controllers;
 require_once __DIR__. '/../../vendor/autoload.php';
 use Config\Database;
 use App\Models\Model;
+use App\Models\TagModel;
 
 class TagController {
 
-    // Récupérer tous les tags ou un tag spécifique par ID
     public function getTag($id = null) {
         if ($id) {
             $tag =Model::show('tags WHERE id = ' . $id); 
@@ -17,15 +17,15 @@ class TagController {
 
         }
     }
+    
 
-    // Ajouter un tag
     public function addTag() {
         if (isset($_POST['name'])) {
             $data = [
                 'name' => $_POST['name']
             ];
             $tagModel = new TagModel();
-            $tagModel->add($data); // Utiliser la méthode add du TagModel
+            $tagModel->add($data); 
             header('Location: /tag');
             exit();
         }
@@ -38,7 +38,7 @@ class TagController {
                 'name' => $_POST['name']
             ];
             $tagModel = new TagModel();
-            $tagModel->update($id, $data); // Utiliser la méthode update du TagModel
+            $tagModel->update($id, $data); 
             header('Location: /tag');
             exit();
         }

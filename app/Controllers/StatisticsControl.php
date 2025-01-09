@@ -3,21 +3,35 @@ namespace App\Controllers;
 
 use App\Models\StatisticsModel;
 
-class DashboardController
+class StatisticsController
 {
     public function index()
     {
-        // Récupérer les statistiques
-        $userCount = StatisticsModel::getEntityCount('users');
-        $articleCount = StatisticsModel::getEntityCount('articles');
-        $categoryCount = StatisticsModel::getEntityCount('categories');
-        $tagCount = StatisticsModel::getEntityCount('tags');
+        $totalUsers = StatisticsModel::getEntityCount('users');
+        $totalArticles = StatisticsModel::getEntityCount('articles');
+        $totalCategories = StatisticsModel::getEntityCount('categories');
+        $totalTags = StatisticsModel::getEntityCount('tags');
 
         $topAuthors = StatisticsModel::getTopAuthors();
         $articlesByCategory = StatisticsModel::getArticlesByCategory();
         $popularArticles = StatisticsModel::getPopularArticles();
 
-        // Inclure la vue et transmettre les données
-        include __DIR__ . '/../views/dashboard.php';
+        $data = [
+            'totalUsers' => $totalUsers,
+            'totalArticles' => $totalArticles,
+            'totalCategories' => $totalCategories,
+            'totalTags' => $totalTags,
+            'topAuthors' => $topAuthors,
+            'articlesByCategory' => $articlesByCategory,
+            'popularArticles' => $popularArticles,
+        ];
+
+        $this->loadView('admin/statistics', $data);
+    }
+
+    private function loadView($view, $data = [])
+    {
+        extract($data);
+        require __DIR__ . "/../../views/$view.php";
     }
 }

@@ -10,6 +10,7 @@ class TagModel extends Model {
         $this->conn = Database::getConnection();
     }
 
+   
     public function show() {
         return parent::show($this->table);
     }

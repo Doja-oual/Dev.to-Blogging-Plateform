@@ -7,8 +7,6 @@ $tagController = new TagController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action'] === 'add') {
         $tagController->addTag();
-    } elseif (isset($_POST['action']) && $_POST['action'] === 'edit') {
-        $tagController->modifieTag($_POST['id']);
     } elseif (isset($_POST['action']) && $_POST['action'] === 'delete') {
         $tagController->supprimeTag($_POST['id']);
     }
@@ -28,18 +26,6 @@ $tags = $tagController->getTag();
             background-color: rgb(78, 115, 223);
             border-color: rgb(78, 115, 223);
         }
-        .btn-success {
-            background-color: rgb(28, 200, 138);
-            border-color: rgb(28, 200, 138);
-        }
-        .btn-info {
-            background-color: rgb(54, 185, 204);
-            border-color: rgb(54, 185, 204);
-        }
-        .btn-warning {
-            background-color: rgb(246, 194, 62);
-            border-color: rgb(246, 194, 62);
-        }
         .btn-danger {
             background-color: rgb(231, 74, 59);
             border-color: rgb(231, 74, 59);
@@ -53,6 +39,7 @@ $tags = $tagController->getTag();
     <div class="container my-5">
         <h1 class="text-primary text-center mb-4">Tags Management</h1>
 
+        <!-- Liste des tags -->
         <h2 class="text-secondary mb-3">Tags List</h2>
         <table class="table table-bordered">
             <thead class="table-dark">
@@ -63,17 +50,13 @@ $tags = $tagController->getTag();
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($tags)): ?>
-                    <?php foreach ($tags as $tag): ?>
+                <?php if (!empty($tags)) : ?>
+                    <?php foreach ($tags as $tag) : ?>
                         <tr>
                             <td><?= htmlspecialchars($tag['id']) ?></td>
                             <td><?= htmlspecialchars($tag['name']) ?></td>
                             <td>
-                                <form action="" method="POST" style="display:inline;">
-                                    <input type="hidden" name="id" value="<?= $tag['id'] ?>">
-                                    <input type="hidden" name="action" value="edit">
-                                    <button type="submit" class="btn btn-info btn-sm">Edit</button>
-                                </form>
+                                <a href="edit_tag.php?edit=<?= $tag['id'] ?>" class="btn btn-info btn-sm">Edit</a>
                                 <form action="" method="POST" style="display:inline;">
                                     <input type="hidden" name="id" value="<?= $tag['id'] ?>">
                                     <input type="hidden" name="action" value="delete">
@@ -82,7 +65,7 @@ $tags = $tagController->getTag();
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
+                <?php else : ?>
                     <tr>
                         <td colspan="3" class="text-center">No tags found.</td>
                     </tr>
@@ -90,7 +73,8 @@ $tags = $tagController->getTag();
             </tbody>
         </table>
 
-        <h2 class="text-secondary mt-5">Add / Edit Tag</h2>
+        <!-- Formulaire pour ajouter un tag -->
+        <h2 class="text-secondary mt-5">Add Tag</h2>
         <form action="" method="POST" class="bg-white p-4 shadow-sm rounded">
             <div class="mb-3">
                 <label for="name" class="form-label">Tag Name:</label>
@@ -101,7 +85,7 @@ $tags = $tagController->getTag();
         </form>
     </div>
 
-    <!-- Include Bootstrap JS (optional) -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

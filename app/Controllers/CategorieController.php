@@ -3,16 +3,24 @@ namespace App\Controllers;
 require_once __DIR__. '/../../vendor/autoload.php';
 use Config\Database;
 use App\Models\Model;
+use App\Models\CategorieModel;
+
+
+
 
 class CategorieController {
+    private $categoryModel;
 
+    public function __construct() {
+        $this->categoryModel = new CategorieModel(); 
+    }
     public function getCategory($id = null) {
         if ($id) {
-            $category = Model::show('categories WHERE id = ' . $id);
+            $category = Model::showCategory('categories WHERE id = ' . $id);
             return $category[0]; 
         } else {
-            $categories = Model::show('categories');
-            return $categories;
+            // $categories = Model::showCategory('categories');
+            // return $categories;
         }
     }
 
@@ -21,7 +29,7 @@ class CategorieController {
             $data = [
                 'name' => $_POST['name']
             ];
-            Model::add('categories', $data);
+            Model::addCategorie('categories', $data);
             header('Location: /category');
         }
     }
@@ -31,15 +39,38 @@ class CategorieController {
             $data = [
                 'name' => $_POST['name']
             ];
-            Model::update('categories', $id, $data);
+            Model::updateCategory('categories', $id, $data);
             header('Location: /category');
         }
     }
 
     public function supprimeCategory($id) {
-        Model::delete('categories', $id);
+        Model::deletecategory('categories', $id);
         header('Location: /category');
     }
+
+    // public function getArticleCountByCategory() {
+    //     return $this->categoryModel->getArticleCountByCategory();
+    // }
+
+    /**
+     * Récupérer les catégories les plus populaires.
+     *
+     * @return array
+     */
+    public function getMostPopularCategories() {
+        return $this->categoryModel->getMostPopularCategories();
+    }
+
+    /**
+     * Récupérer les tendances des catégories.
+     *
+     * @return array
+     */
+    public function getCategoryTrends() {
+        return $this->categoryModel->getCategoryTrends();
+    }
+
 }
 
 

@@ -2,10 +2,50 @@
     namespace App\Models;
     require_once __DIR__. '/../../vendor/autoload.php';
     use  Config\Database;
+    
+    
+
 
 class Model{
     private $conn;
     private $table;
+
+
+    // public static function getCountByRelation($mainTable, $relatedTable, $foreignKey) {
+    //     $conn=Database::getConnection(); 
+    //     $sql = "SELECT m.id, m.name, COUNT(r.id) as item_count 
+    //             FROM $mainTable m 
+    //             LEFT JOIN $relatedTable r ON m.id = r.$foreignKey 
+    //             GROUP BY m.id";
+    //     $stmt = $this->conn->prepare($sql);
+    //     $stmt->execute();
+    //     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    // }
+    public static function getMostPopular($mainTable, $relatedTable, $foreignKey, $countColumn, $limit = 5) {
+        $conn=Database::getConnection(); 
+        $sql = "SELECT m.id, m.name, SUM(r.$countColumn) as total_count 
+                FROM $mainTable m 
+                LEFT JOIN $relatedTable r ON m.id = r.$foreignKey 
+                GROUP BY m.id 
+                ORDER BY total_count DESC 
+                LIMIT $limit";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+      public static function getTrends($mainTable, $relatedTable, $foreignKey, $dateColumn, $daysInterval = 30) {
+    $conn=Database::getConnection(); 
+       $sql = "SELECT m.name, DATE(r.$dateColumn) as creation_date, COUNT(r.id) as item_count 
+                FROM $mainTable m 
+                LEFT JOIN $relatedTable r ON m.id = r.$foreignKey 
+                WHERE r.$dateColumn >= DATE_SUB(NOW(), INTERVAL $daysInterval DAY) 
+                GROUP BY m.name, creation_date 
+                ORDER BY creation_date DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
     public static function show($table) {
         $conn=Database::getConnection(); 
         $sql = "SELECT * FROM $table ";
