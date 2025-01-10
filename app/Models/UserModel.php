@@ -18,6 +18,11 @@ class UserModel {
     
     public static function addUser($data) {
         $conn = self::getConnection();
+    
+        // Hacher le mot de passe avant de l'insérer
+        $passwordHash = password_hash($data['password'], PASSWORD_DEFAULT);
+    
+        // Requête SQL pour insérer l'utilisateur
         $sql = "INSERT INTO users (username, email, password_hash, role, bio, profile_picture_url) 
                 VALUES (:username, :email, :password_hash, :role, :bio, :profile_picture_url)";
         
@@ -26,8 +31,8 @@ class UserModel {
         return $stmt->execute([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
-            'role' => $data['role'] ?? 'user',
+            'password_hash' => $passwordHash, // Mot de passe hashé
+            'role' => $data['role'] ?? 'user', // Rôle par défaut : 'user'
             'bio' => $data['bio'] ?? null,
             'profile_picture_url' => $data['profile_picture_url'] ?? null
         ]);
@@ -99,16 +104,20 @@ class UserModel {
 
     public static function login($email, $password) {
         $conn = self::getConnection();
+    
+        // Récupérer l'utilisateur par email
         $sql = "SELECT id, username, email, password_hash, role FROM users WHERE email = :email";
         $stmt = $conn->prepare($sql);
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-
+    
+        // Vérifier le mot de passe
         if ($user && password_verify($password, $user['password_hash'])) {
             // Retourner les informations de l'utilisateur (sans le mot de passe)
             unset($user['password_hash']);
             return $user;
         }
-        return false;
+    
+        return false; // Échec de la connexion
     }
 }

@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = UserModel::login($email, $password);
 
     if ($user) {
-        // Enregistrer l'utilisateur dans la session
         $_SESSION['user'] = $user;
 
         if ($user['role'] === 'admin') {
@@ -24,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "<div class='alert alert-danger'>Email ou mot de passe incorrect.</div>";
     }
+
 }
 ?>
 

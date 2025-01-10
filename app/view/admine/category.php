@@ -96,11 +96,121 @@ $categoryTrends = $categoryController->getCategoryTrends();
             color: #2575fc;
             font-weight: bold;
         }
-    
+        .bg-light {
+            background-color: rgb(244, 246, 249) !important;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+        .main-content {
+            margin-left: 250px; /* Pour laisser de la place à la sidebar */
+            padding: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            color: rgb(78, 115, 223) !important;
+        }
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 18px;
+            color: #333;
+        }
+        .stat-card p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .footer {
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        .footer a {
+            color: rgb(78, 115, 223);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body class="bg-light">
-    <div class="container my-5">
+<header class="bg-white shadow-sm mb-4">
+            <div class="container-fluid">
+                <nav class="navbar navbar-light">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-outline-primary me-3 d-lg-none" id="sidebarToggle">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <h1 class="h4 mb-0">Dashboard</h1>
+                    </div>
+                    <div class="d-flex">
+                        <form class="d-flex me-3" action="/search" method="GET">
+                            <input class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
+                        <a href="/logout" class="btn btn-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+<aside class="sidebar">
+        <div class="p-3">
+            <h3 class="text-primary mb-4">DevSphere</h3>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">
+                        <i class="bi bi-house me-2"></i>Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/articles">
+                        <i class="bi bi-file-earmark-text me-2"></i>Articles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/categories">
+                        <i class="bi bi-tags me-2"></i>Catégories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tags">
+                        <i class="bi bi-hash me-2"></i>Tags
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">
+                        <i class="bi bi-info-circle me-2"></i>À Propos
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <div class="container my-5 main-content">
         <h1 class="text-primary text-center mb-4">Gestion des Catégories</h1>
 
         <!-- Affichage des statistiques -->
